@@ -9,7 +9,7 @@
           <img 
             class="mainProduct__img"
             :src="'./src/assets/' + products[mainProduct].img"
-            @click="showBigPhoto" 
+            @click="showOverlay" 
             :alt="products[mainProduct].header">
         </div>
         
@@ -51,6 +51,7 @@
                 <a 
                   key="index"
                   @mouseover="setStar(index)"
+                  @click="estimateProduct(index)"
                   class="mainProduct__star" 
                   href="#" 
                   :class="[item > products[mainProduct].stars ? 'mainProduct__star_gray' : 'mainProduct__star_bright']">
@@ -286,24 +287,41 @@ export default {
       }
       target.classList.add('mainProduct__sizeListItem_active')
     },
+    
     setStar: function(index) {
-      this.products[this.mainProduct].stars = index + 1;
+      if(!this.productsStars[this.mainProduct]){
+        this.products[this.mainProduct].stars = index + 1;
+      }
     },
+    
+    estimateProduct: function(e){
+      this.productsStars[this.mainProduct] = e;
+    },
+
     showShare: function() {
       this.shareIsVisiable = !this.shareIsVisiable;
     },
+    
     hideShare: function() {
       this.shareIsVisiable = false;
     },
+    
     makeItomMain: function(index) {
+      const size = document.querySelector('.mainProduct__sizeListItem_active');
+      if(size){
+        size.classList.remove('mainProduct__sizeListItem_active');
+      }
       this.mainProduct = index;
     },
-    showBigPhoto: function() {
+
+    showOverlay: function() {
       this.overlayShow = true;
     },
+    
     hideOverlay: function() {
       this.overlayShow = false;
     },
+    
     addToCard: function() {
       const sizeEl = document.querySelector('.mainProduct__sizeListItem_active');
       if(!sizeEl) {
