@@ -3,7 +3,12 @@
       
     <section class="mainProduct">
 
-      <div class="container_flex">
+      <div class="container_flex mainProduct__container">
+       
+        <h3 class="mainProduct__header" 
+          v-if="pageSize !== 'L'">
+          {{products[mainProduct].header}}
+        </h3>
         
         <div class="mainProduct__imgWrap">
           <img 
@@ -18,7 +23,7 @@
 
         <div class="mainProduct__info">
 
-          <h3 class="mainProduct__header">
+          <h3 class="mainProduct__header" v-if="pageSize === 'L'">
             {{products[mainProduct].header}}
           </h3>
         
@@ -98,13 +103,17 @@
 
           </div>
         
+
+          <div class="mainProduct__aboutWrap">
+            <h5 class="mainProduct__blockHeader">{{aboutHeader}}</h5>  
+            <p class="mainProduct__about">
+              {{products[mainProduct].about}}
+            </p>
+          </div>
         
-          <p class="mainProduct__about">
-            {{products[mainProduct].about}}
-          </p>
-        
+
           <div class="mainProduct__sizeWrap">
-            <span class="mainProduct__size">size:</span>
+            <h5 class="mainProduct__blockHeader">{{sizeHeader}}:</h5>
             <ul class="mainProduct__sizeList">
               <li 
                 v-for="(item, index) in products[mainProduct].size"
@@ -146,7 +155,10 @@
             @click.prevent="makeItomMain(index)"
             v-if="index !== mainProduct">
               <a href="#">
-                <img :src="'./src/assets/'+item.imgMin" alt="item.header">
+                <img 
+                  :src="'./src/assets/'+item.imgMin" 
+                  class="grid__img"
+                  alt="item.header">
                 
                 <p class="grid__price">
                 <span 
@@ -192,6 +204,7 @@ export default {
   name: 'app',
   data () {
     return {
+      pageSize: '',
       productsStars: {},
       overlayShow: false,
       shareIsVisiable: false,
@@ -278,6 +291,14 @@ export default {
       social: ['fb.svg', 'twitter.svg', 'pinterest.svg', 'yt.svg', 'instagram.svg']     
     }
   },
+  computed:{
+    sizeHeader: function() {
+      return this.pageSize === 'L' ? 'size' : 'select a size';
+    },
+    aboutHeader: function() {
+      return this.pageSize === 'L' ? '' : 'details:';
+    }
+  },
   methods:{
     chooseSize: function(e){
       const target = e.target;
@@ -293,7 +314,7 @@ export default {
         this.products[this.mainProduct].stars = index + 1;
       }
     },
-    
+
     estimateProduct: function(e){
       this.productsStars[this.mainProduct] = e;
     },
@@ -325,7 +346,7 @@ export default {
     addToCard: function() {
       const sizeEl = document.querySelector('.mainProduct__sizeListItem_active');
       if(!sizeEl) {
-        addMsg('Please choose a size', 'mainProduct__errorMsg');
+        addMsg('Please select a size', 'mainProduct__errorMsg');
         return;
       };
       function addMsg(txt, className){
@@ -351,21 +372,31 @@ export default {
         size: vPath.size[index]
       };
       addMsg('The product was added', 'mainProduct__successMsg');
-
       console.table(newProduct);
-
+    },
+    resizeWidow: function(){
+      const pageWidth = window.innerWidth;
+      if( pageWidth > 935 ) {
+        this.pageSize = "L";
+      }
+      else if ( pageWidth > 730 ) {
+        this.pageSize = "M";
+      }
+      else{
+        this.pageSize = "S";
+      }
     }
   },
   created: function() {
-
-
-
-
-
+    this.resizeWidow();
+    window.addEventListener('resize', this.resizeWidow);
   }
 
 }
 </script>
+
+
+
 
 
 
@@ -378,8 +409,12 @@ export default {
 
 
 .mainProduct{
+  &__imgWrap{
+    flex: 0 0 50%;
+  }
   &__img{
     cursor: pointer;
+    width: 100%;
   }
   &__info{
     margin: 0 0 0 60px;
@@ -400,6 +435,7 @@ export default {
     font-weight: bold;
     font-size: 24px;
     margin: 0 0 20px 0;
+    word-spacing: -10px;
   }
   &__oldPrice{
     text-decoration: line-through;
@@ -517,7 +553,7 @@ export default {
     align-items: baseline;
     margin: 0 0 15px 0;
   }
-  &__size{
+  &__blockHeader{
     font-size: 14px;
     font-weight: bold;
     text-transform: uppercase;
@@ -627,6 +663,10 @@ export default {
     margin: 0 0 15px 0;
     position: relative;
   }
+  &__img{
+    width: 100%;
+    height: 100%;
+  }
   &__price{
     position: absolute;
     bottom: 20px;
@@ -644,8 +684,6 @@ export default {
     color: $vRed;
     margin: 0 0 0 10px;
   }
-
-
 }
 
 .overlay{
@@ -691,23 +729,188 @@ export default {
 
 
 
-/* Medium Devices, Desktops */
-@media only screen and (max-width : 992px) {
-  
-
-}
-
-
-
-
-
-
 /* Small Devices, Tablets */
-@media only screen and (max-width : 768px) {
+@media only screen and (max-width : 935px) {
+.mainProduct{
+  &__container{
+    flex-wrap: wrap;
+  }
+  &__header{
+    font-size: 24px;
+    flex: 0 0 100%;
+    margin: 0 0 10px 0;
+  }
+  &__imgWrap{
+    flex: 0 0 50%;
+  }
+  &__info{
+    flex: 0 0 50%;
+    margin: 0px;
+    padding: 0 0 0 20px;
+    box-sizing: border-box;
+  }
+  &__item{
+    font-size: 10px;
+    margin: 0px;
+  }
+  &__price{
+    font-weight: bold;
+    font-size: 36px;
+    margin: 0 0 10px 0;
+  }
+  &__newPrice{
+    margin: 0 0 0 25px;
+  }
+  &__starsAndShareWrap{
+    margin: 0 0 10px 0;
+  }
+  &__star{
+    margin: 0 2px 0 0;
+    width: 16px;
+    height: 16px;
+  }
+  &__shareWrap{
+    display: inline-block;
+    margin: 0 0 0 15px;
+  }
+  &__shareBtn{
+    display: none;
+  }
+  &__shareWindow{
+    position: absolute;
+    width: 290px;
+    height: 110px;
+    box-sizing: border-box;
+    top: calc( 100% + 15px);
+    left: calc(50% - 145px);
+    background: #fff;
+    padding: 15px 15px 20px 15px;
+    font-weight: bold;
+    font-size: 18px;
+    z-index: 10;
+    box-shadow: 0 0 5px rgba(0,0,0,.75);
+    &:after{
+      display: none;
+    }
+    &:before{
+      display: none;
+    }
+  }
+  &__shareHeader{
+    margin: 0px;
+  }
+  &__shareClose{
+    display: none;
+  }
+  &__shareList{
+    display: flex;
+    justify-content: space-between;
+  }
+  &__shareLink{
+    width: 40px;
+    height: 40px;
+    display: block;
+  }
+  &__shareImg{
+    width: 100%;
+    height: 100%;
+  }
+  &__about{
+    font-size: 12px;
+    font-weight: 100;
+    text-align: justify;
+    margin: 0 0 15px 0;
+  }
+  &__sizeWrap{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    margin: 0px 0 10px 0;
+  }
+  &__blockHeader{
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100%;
+    margin: 0 0 10px 0;
+  }
+  
+  &__sizeListItem{
+    margin: 0 15px 0 0px;
+  }
+  
+  &__btn{
+    font-size: 18px;
+    padding: 15px 50px;
+    letter-spacing: 1.1px;
+  }
+ 
+}
+
+
+
+
+.grid{
+  &__header{
+    margin: 0 0 15px 0;
+    text-align: center;
+  }
+  &__list{
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  &__listItem{
+    margin: 0 0 15px 0;
+    width: 300px;
+  }
+  &__price{
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    padding: 0px;
+    background: rgba(138,230,207,.8);
+    font-size: 22px;
+    text-align: center;
+    line-height: 30px;
+  }
+  &__oldPrice{
+    display: none;
+  }
+  &__newPrice{
+    color: $vRed;
+    margin: 0 0 0 10px;
+  }
+
+
+}
+
+
+
+.overlay{
+  &__img{
+    width: 400px;
+    transform: scale(1.3);
+  }
+  &__close{
+    width: 30px;
+    height: 30px;
+    top: 30px;
+    right: 30px;
+  }
+}
 
 
 
 }
+
+
+
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width : 730px) {
+
+}
+
 
 
 /* Extra Small Devices, Phones */

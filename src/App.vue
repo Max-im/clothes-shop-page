@@ -33,7 +33,7 @@ export default {
 body{
   color: #2c303d;
   background: #f6f6f6;
-  font-family: 'Open Sans';
+  font-family: 'Open Sans', arial;
 }
 
 .container{
@@ -68,12 +68,16 @@ ul{
 
 
 
-
-/* Medium Devices, Desktops */
-@media only screen and (max-width : 992px) {
- 
+/* Small Devices, Tablets */
+@media only screen and (max-width : 935px) {
+  
+.container{
+  max-width: 640px;
+  padding: 30px 35px;
+}
 
 }
+
 
 
 

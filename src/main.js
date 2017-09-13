@@ -3,7 +3,7 @@ import VueCurrencyFilter from 'vue-currency-filter';
 
 import App from './App.vue';
 
-Vue.use(VueCurrencyFilter, {symbol : '$',fractionCount: '2'});
+Vue.use(VueCurrencyFilter, {symbol : '$',fractionCount: '2', fractionSeparator: '.'});
 
 new Vue({
   el: '#app',
