@@ -16,6 +16,21 @@
             :src="'./src/assets/' + products[mainProduct].img"
             @click="showOverlay" 
             :alt="products[mainProduct].header">
+
+            <ul v-if="pageSize !== 'L'" class="mainProduct__shareList">
+                  <li v-for="(item, index) in social">
+                    <a 
+                      :key="index"
+                      @click.prevent = "getShare"
+                      class="mainProduct__shareLink" 
+                      href="#">
+                      <img 
+                        :src="'./src/assets/share/'+item" 
+                        class="mainProduct__shareImg"
+                        alt="item">
+                    </a>
+                  </li>
+                </ul>
         </div>
         
 
@@ -65,7 +80,7 @@
               </li>
             </ul>
             
-            <div class="mainProduct__shareWrap">
+            <div v-if="pageSize === 'L'" class="mainProduct__shareWrap">
               <a 
                 href="#"
                 @click.prevent="showShare"
@@ -98,6 +113,7 @@
                     </a>
                   </li>
                 </ul>
+
               </div>
             </div>
 
@@ -411,6 +427,7 @@ export default {
 .mainProduct{
   &__imgWrap{
     flex: 0 0 50%;
+    position: relative;
   }
   &__img{
     cursor: pointer;
@@ -769,51 +786,16 @@ export default {
     width: 16px;
     height: 16px;
   }
-  &__shareWrap{
-    display: inline-block;
-    margin: 0 0 0 15px;
-  }
-  &__shareBtn{
-    display: none;
-  }
-  &__shareWindow{
-    position: absolute;
-    width: 290px;
-    height: 110px;
-    box-sizing: border-box;
-    top: calc( 100% + 15px);
-    left: calc(50% - 145px);
-    background: #fff;
-    padding: 15px 15px 20px 15px;
-    font-weight: bold;
-    font-size: 18px;
-    z-index: 10;
-    box-shadow: 0 0 5px rgba(0,0,0,.75);
-    &:after{
-      display: none;
-    }
-    &:before{
-      display: none;
-    }
-  }
-  &__shareHeader{
-    margin: 0px;
-  }
-  &__shareClose{
-    display: none;
-  }
   &__shareList{
+    position: absolute;
+    top: 10px;
+    left: 10px;
     display: flex;
-    justify-content: space-between;
+    z-index: 15;
+    flex-direction: column;
   }
   &__shareLink{
-    width: 40px;
-    height: 40px;
-    display: block;
-  }
-  &__shareImg{
-    width: 100%;
-    height: 100%;
+    margin: 0 0 10px 0;
   }
   &__about{
     font-size: 12px;
