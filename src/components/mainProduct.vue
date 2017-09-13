@@ -8,6 +8,9 @@
         <h3 class="mainProduct__header" 
           v-if="pageSize !== 'L'">
           {{products[mainProduct].header}}
+          <span class="mainProduct__headerTail">
+            {{products[mainProduct].headerTail}}
+          </span>
         </h3>
         
         <div class="mainProduct__imgWrap">
@@ -17,7 +20,7 @@
             @click="showOverlay" 
             :alt="products[mainProduct].header">
 
-            <ul v-if="pageSize !== 'L'" class="mainProduct__shareList">
+            <ul v-if="pageSize === 'M'" class="mainProduct__shareList">
                   <li v-for="(item, index) in social">
                     <a 
                       :key="index"
@@ -40,6 +43,9 @@
 
           <h3 class="mainProduct__header" v-if="pageSize === 'L'">
             {{products[mainProduct].header}}
+            <span class="mainProduct__headerTail">
+              {{products[mainProduct].headerTail}}
+            </span>
           </h3>
         
 
@@ -67,7 +73,8 @@
           <div class="mainProduct__starsAndShareWrap">
             
             <ul class="mainProduct__starsList">
-              <li v-for="(item, index) in 5" class="mainProduct__starListItem">
+              <li v-for="(item, index) in 5" 
+              class="mainProduct__starListItem">
                 <a 
                   key="index"
                   @mouseover="setStar(index)"
@@ -77,12 +84,13 @@
                   :class="[item > products[mainProduct].stars ? 'mainProduct__star_gray' : 'mainProduct__star_bright']">
                 </a>
               </li>
-              </li>
             </ul>
             
-            <div v-if="pageSize === 'L'" class="mainProduct__shareWrap">
+            <div v-if="pageSize !== 'M'" class="mainProduct__shareWrap">
+              
               <a 
                 href="#"
+                v-if="pageSize === 'L'"
                 @click.prevent="showShare"
                 class="mainProduct__shareBtn">Share it!
               </a>
@@ -91,10 +99,15 @@
                 v-show="shareIsVisiable" 
                 class="mainProduct__shareWindow">
                 
-                <h5 class="mainProduct__shareHeader">Share width</h5>
+                <h5 
+                  v-if="pageSize === 'L'"
+                  class="mainProduct__shareHeader">
+                  Share width
+                </h5>
                 
                 <a 
                   href="#" 
+                  v-if="pageSize === 'L'"
                   @click.prevent="hideShare"
                   class="mainProduct__shareClose">
                 </a>
@@ -227,7 +240,8 @@ export default {
       mainProduct: 0,
       products: [
         {
-          header: 'for gamers by gamers tee',
+          header: 'for gamers by gamers',
+          headerTail: 'tee',
           img: 'product1.jpg',
           imgMin: 'product1.min.jpg',
           id: '701642853695',
@@ -239,6 +253,7 @@ export default {
         },
         {
           header: 'be awesome, be you',
+          headerTail: 'tee',
           img: 'product2.jpg',
           imgMin: 'product2.min.jpg',
           id: '701642853696',
@@ -250,6 +265,7 @@ export default {
         },
         {
           header: 'take you\'s style',
+          headerTail: 'tee',
           img: 'product3.jpg',
           imgMin: 'product3.min.jpg',
           id: '701642853697',
@@ -261,6 +277,7 @@ export default {
         },
         {
           header: 'gamer in the house',
+          headerTail: 'tee',
           img: 'product4.jpg',
           imgMin: 'product4.min.jpg',
           id: '701642853698',
@@ -272,6 +289,7 @@ export default {
         },
         {
           header: 'gaming for go',
+          headerTail: 'tee',
           img: 'product5.jpg',
           imgMin: 'product5.min.jpg',
           id: '701642853699',
@@ -283,6 +301,7 @@ export default {
         },
         {
           header: 'game in my soul',
+          headerTail: 'tee',
           img: 'product6.jpg',
           imgMin: 'product6.min.jpg',
           id: '701642853700',
@@ -294,6 +313,7 @@ export default {
         },
         {
           header: 'super gamer',
+          headerTail: 'tee',
           img: 'product7.jpg',
           imgMin: 'product7.min.jpg',
           id: '701642853701',
@@ -312,7 +332,7 @@ export default {
       return this.pageSize === 'L' ? 'size' : 'select a size';
     },
     aboutHeader: function() {
-      return this.pageSize === 'L' ? '' : 'details:';
+      return this.pageSize !== 'M' ? '' : 'details:';
     }
   },
   methods:{
@@ -394,12 +414,15 @@ export default {
       const pageWidth = window.innerWidth;
       if( pageWidth > 935 ) {
         this.pageSize = "L";
+        this.shareIsVisiable = false;
       }
       else if ( pageWidth > 730 ) {
         this.pageSize = "M";
+        this.shareIsVisiable = false;
       }
       else{
         this.pageSize = "S";
+        this.shareIsVisiable = true;
       }
     }
   },
@@ -588,6 +611,7 @@ export default {
     text-align: center;
     text-transform: uppercase;
     color: $vBlack;
+    background: #fff;
     font-size: 10px;
     font-weight: bold;
     margin: 0 0 0 10px;
@@ -890,6 +914,122 @@ export default {
 
 /* Extra Small Devices, Phones */
 @media only screen and (max-width : 730px) {
+
+.mainProduct{
+  &__header{
+    font-size: 24px;
+    flex: 0 0 100%;
+    padding: 0 35px;
+    box-sizing: border-box;
+    margin: 0 0 10px 0;
+  }
+  &__headerTail{
+    display: block;
+  }
+  &__imgWrap{
+    flex: 0 0 100%;
+  }
+  &__info{
+    flex: 0 0 100%;
+    margin: 20px 0 0 0;
+    padding: 0 35px;
+    box-sizing: border-box;
+  }
+  &__item{
+    font-size: 10px;
+    margin: 0px;
+  }
+  &__price{
+    font-weight: bold;
+    font-size: 36px;
+    margin: 0 0 10px 0;
+  }
+  &__newPrice{
+    margin: 0 0 0 25px;
+  }
+  &__starsAndShareWrap{
+    margin: 0 0 10px 0;
+  }
+  &__star{
+    margin: 0 2px 0 0;
+    width: 16px;
+    height: 16px;
+  }
+  &__shareWrap{
+    display: block;
+    position: static;
+    margin: 0px;
+  }
+  &__shareWindow{
+    position: static;
+    display: block;
+    width: 100%;
+    height: auto;
+    left: 0;
+    top: 0;
+    background: none;
+    padding: 0px;
+    box-shadow: none;
+    &:after{
+      display: none;
+    }
+    &:before{
+      display: none;
+    }
+  }
+  &__shareList{
+    position: static;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    margin: 30px 0;
+  }
+  &__shareLink{
+    width: 40px;
+    height: 40px;
+    display: block;
+    margin: 0px 10px 0 0;
+  }
+  &__about{
+    font-size: 14px;
+    font-weight: 100;
+    text-align: justify;
+    margin: 0 0 30px 0;
+  }
+  &__sizeWrap{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    margin: 0px 0 30px 0;
+  }
+  &__blockHeader{
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+    margin: 0 0 10px 0;
+  }
+  &__sizeList{
+    margin: 0 auto;
+  }
+  &__sizeListItem{
+    margin: 0 15px;
+  }
+  &__btnWrap{
+    text-align: center;
+  }
+  &__btn{
+    font-size: 18px;
+    padding: 15px 50px;
+    letter-spacing: 1.1px;
+  }
+ 
+}
+
+
+
+
 
 }
 

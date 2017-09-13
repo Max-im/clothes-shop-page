@@ -40,7 +40,7 @@ body{
   margin: 0 auto;
   width: 100%;
   max-width: 835px;
-  min-width: 320px;
+  min-width: 400px;
   padding: 30px 50px;
   &_flex{
     @extend .container;
@@ -85,8 +85,12 @@ ul{
 
 
 /* Small Devices, Tablets */
-@media only screen and (max-width : 768px) {
+@media only screen and (max-width : 730px) {
 
+.container{
+  max-width: 400px;
+  padding: 30px 0px;
+}
 
 
 }
