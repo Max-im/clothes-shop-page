@@ -177,33 +177,50 @@
         
         <h3 class="grid__header">you may also like</h3>
         
-        <ul class="grid__list">
-          <li 
-            class="grid__listItem"
-            v-for="(item, index) in products" 
-            @click.prevent="makeItomMain(index)"
-            v-if="index !== mainProduct">
-              <a href="#">
-                <img 
-                  :src="'./src/assets/'+item.imgMin" 
-                  class="grid__img"
-                  alt="item.header">
-                
-                <p class="grid__price">
-                <span 
-                  :class="[products[index].newPrice == '' ? '' :  'grid__oldPrice' ]">
-                  {{ products[index].price | currency }} 
-                </span>
-                <span 
-                  v-if="products[index].newPrice !== ''"
-                  class="grid__newPrice">
-                  {{products[index].newPrice | currency}}
-                </span>
-              </p>
+        <div class="grid__slider">
+          <div class="grid__listWrap">
+            <ul class="grid__list">
+              <li 
+                class="grid__listItem"
+                v-for="(item, index) in products" 
+                @click.prevent="makeItomMain(index)"
+                v-if="index !== mainProduct">
+                  <a href="#">
+                    <img 
+                      :src="'./src/assets/'+item.imgMin" 
+                      class="grid__img"
+                      alt="item.header">
+                    
+                    <p class="grid__price">
+                    <span 
+                      :class="[products[index].newPrice == '' ? '' :  'grid__oldPrice' ]">
+                      {{ products[index].price | currency }} 
+                    </span>
+                    <span 
+                      v-if="products[index].newPrice !== ''"
+                      class="grid__newPrice">
+                      {{products[index].newPrice | currency}}
+                    </span>
+                  </p>
+            
+                  </a>
+              </li>
+            </ul>
+          </div>
+          <div class="grid__listControl" v-if="pageSize === 'S'">
+            <a 
+              class="grid__controlLink grid__controlLink_prev" 
+              @click.prevent="sliderControl"
+              href="#">
+            </a>
+            <a 
+              class="grid__controlLink grid__controlLink_next" 
+              @click.prevent="sliderControl"
+              href="#">
+            </a>            
+          </div>
+        </div>
 
-              </a>
-          </li>
-        </ul>
 
       </div> <!-- container -->
     </section> <!-- grid -->
@@ -327,6 +344,8 @@ export default {
       social: ['fb.svg', 'twitter.svg', 'pinterest.svg', 'yt.svg', 'instagram.svg']     
     }
   },
+
+
   computed:{
     sizeHeader: function() {
       return this.pageSize === 'L' ? 'size' : 'select a size';
@@ -375,10 +394,42 @@ export default {
       this.overlayShow = true;
     },
     
-    hideOverlay: function() {
+    hideOverlay: function(e) {
+
+      if(e.target.nodeName === 'IMG') return;
       this.overlayShow = false;
     },
-    
+    sliderControl: function(e){
+      const target = e.target;
+      const slider = document.querySelector('.grid__list');
+      const len = document.querySelectorAll('.grid__listItem').length;
+      const switchEl = 280;
+      let leftStyle = parseInt(slider.style.left) || 0;
+
+      console.log(len)
+
+      if(target.classList.contains('grid__controlLink_prev')){
+        
+        if( leftStyle === 0 ) {
+          return;
+        }
+
+        leftStyle += switchEl;
+      }
+      else{
+        
+        console.log(len * switchEl);
+        console.log(leftStyle)
+        if( leftStyle === - (len - 1) * switchEl ) {
+          return;
+        }
+
+        leftStyle -= switchEl;
+      }
+      
+      slider.style.left = leftStyle + 'px';
+    },
+
     addToCard: function() {
       const sizeEl = document.querySelector('.mainProduct__sizeListItem_active');
       if(!sizeEl) {
@@ -410,6 +461,7 @@ export default {
       addMsg('The product was added', 'mainProduct__successMsg');
       console.table(newProduct);
     },
+
     resizeWidow: function(){
       const pageWidth = window.innerWidth;
       if( pageWidth > 935 ) {
@@ -695,6 +747,9 @@ export default {
     text-transform: uppercase;
     margin: 0 0 15px 0;
   }
+  &__listWrap{
+    position: relative;
+  }
   &__list{
     display: flex;
     flex-wrap: wrap;
@@ -735,6 +790,7 @@ export default {
   min-height: 100vh;
   left: 0;
   top: 0;
+  z-index: 1000;
   background: rgba(0,0,0,.7);
   &__img{
     margin: auto;
@@ -886,8 +942,6 @@ export default {
     color: $vRed;
     margin: 0 0 0 10px;
   }
-
-
 }
 
 
@@ -1014,7 +1068,7 @@ export default {
     margin: 0 auto;
   }
   &__sizeListItem{
-    margin: 0 15px;
+    margin: 0 10px;
   }
   &__btnWrap{
     text-align: center;
@@ -1027,6 +1081,75 @@ export default {
  
 }
 
+
+
+
+.grid{
+  &__header{
+    margin: 0 0 15px 0;
+    font-size: 24px;
+    text-align: center;
+  }
+  &__slider{
+    position: relative;
+  }
+  &__listWrap{
+    width: 280px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  &__list{
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    position: relative;
+    left: 0;
+    transition: all .5s ease-in-out;
+  }
+  &__listItem{
+    margin: 0px;
+    width: 280px;
+    flex: 0 0 280px;
+  }
+  &__controlLink{
+    position: absolute;
+    z-index: 20;
+    display: block;
+    width: 30px;
+    height: 50px;
+    background: url('../assets/chevron.svg');
+    background-size: cover;
+    top: calc( 50% - 15px);
+    opacity: .7;
+    &:hover{
+      opacity: 1;
+    }
+    &_prev{
+      left: 0;  
+    }
+    &_next{
+      transform: rotate(180deg);
+      right: 0;  
+    }
+  }
+  &__price{
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    padding: 0px;
+    background: rgba(138,230,207,.8);
+    font-size: 22px;
+    text-align: center;
+    line-height: 30px;
+  }
+  &__oldPrice{
+    display: none;
+  }
+  &__newPrice{
+    color: $vRed;
+    margin: 0 0 0 10px;
+  }
+}
 
 
 
