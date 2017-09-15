@@ -22,7 +22,7 @@ USED:
 * CSS3;
 * SASS (SCSS);
 * ES6 (babel);
-* Vue;
+* Vue.
 
 
 SCHEDULE:
@@ -31,10 +31,10 @@ SCHEDULE:
 1. prepare the environment 	- 02 hours;
 2. make desktop page		- 05 hours;
 3. add some fitches			- 02 hours;
-4. adaptive					- 03 hours;
-3. optimisation				- 02 hours;
+4. adaptive					- 04 hours;
+3. optimisation				- 03 hours;
 
-total time: 14 hours;
+total time: 16 hours;
 
 
 
